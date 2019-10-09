@@ -1,0 +1,27 @@
+#debug or release
+run_mode = "debug"
+
+#mysql数据库
+[database]
+type = "mysql"
+host = "127.0.0.1"
+port = 3306
+user = "root"
+password = "root"
+database_name = "blog"
+table_prefix = "blog_"
+
+#基本配置
+[basic]
+page_size = 10
+jwt_secret = "23347$040412"
+
+#web服务
+[server]
+http_port = 8080
+read_timeout = 60
+write_timeout = 60
+
+#日志
+[log]
+log_path = "log"
