@@ -2,8 +2,6 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"gorestfulapiforcms/middleware/jwt"
 	"gorestfulapiforcms/middleware/log"
 	"gorestfulapiforcms/routers/api"
@@ -26,7 +24,6 @@ func InitRouter() *gin.Engine {
 
 	api_v1 := r.Group("/api/v1")
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	api_v1.Use(log.LoggerToFile(), jwt.JWT())
 	{
 		//获取标签列表
