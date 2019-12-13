@@ -2,49 +2,52 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorestfulapiforcms/middleware/jwt"
 	"gorestfulapiforcms/middleware/log"
-	"gorestfulapiforcms/routers/api"
-
 	"gorestfulapiforcms/pkg/setting"
-
-	"gorestfulapiforcms/routers/api/v1"
+	"gorestfulapiforcms/routers/j"
 )
 
 func InitRouter() *gin.Engine {
-	r := gin.New()
-
-	r.Use(gin.Logger())
-
+	r := gin.New()//初始化gin
+/*	gin.ForceConsoleColor()//控制台的日志颜色控制
+	r.Use(gin.Logger())//将日志输出到控制台*/
 	r.Use(gin.Recovery())
-
 	gin.SetMode(setting.Config().Run_mode)
+	log.LoggerToFile() //写入日志，后期改为异步
+	//r.GET("/auth", j.GetAuth)
 
-	r.GET("/auth", api.GetAuth)
-
-	api_v1 := r.Group("/api/v1")
-
-	api_v1.Use(log.LoggerToFile(), jwt.JWT())
+	//j文件夹的api是给内部提供的json
+	group_j := r.Group("/j")
+	//group_j.Use(log.LoggerToFile(), jwt.JWT())
+	group_j.Use(log.LoggerToFile())
 	{
 		//获取标签列表
-		api_v1.GET("/tags", v1.GetTags)
+		group_j.GET("/tags", j.GetTags)
 		//新建标签
-		api_v1.POST("/tags", v1.AddTag)
+		group_j.POST("/tags", j.AddTag)
 		//更新指定标签
-		api_v1.PUT("/tags/:id", v1.EditTag)
+		group_j.PUT("/tags/:id", j.EditTag)
 		//删除指定标签
-		api_v1.DELETE("/tags/:id", v1.DeleteTag)
+		group_j.DELETE("/tags/:id", j.DeleteTag)
 
 		//获取文章列表
-		api_v1.GET("/articles", v1.GetArticles)
+		group_j.GET("/articles", j.GetArticles)
 		//获取指定文章
-		api_v1.GET("/articles/:id", v1.GetArticle)
+		group_j.GET("/articles/:id", j.GetArticle)
 		//新建文章
-		api_v1.POST("/articles", v1.AddArticle)
+		group_j.POST("/articles", j.AddArticle)
 		//更新指定文章
-		api_v1.PUT("/articles/:id", v1.EditArticle)
+		group_j.PUT("/articles/:id", j.EditArticle)
 		//删除指定文章
-		api_v1.DELETE("/articles/:id", v1.DeleteArticle)
+		group_j.DELETE("/articles/:id", j.DeleteArticle)
+	}
+
+	//j文件夹下是给外部提供的
+	group_x := r.Group("/x")
+	//group_j.Use(log.LoggerToFile(), jwt.JWT())
+	group_x.Use()
+	{
+		//获取标签列表
 	}
 
 	return r

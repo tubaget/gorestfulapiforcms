@@ -5,12 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"gorestfulapiforcms/pkg/setting"
+	"log"
 	"os"
 	"strconv"
 	"time"
 )
 
 var absolute_file_name = ""
+
 func init() {
 	//用数组串联整个目录结构，没有哪层就创建哪层  获取日志写入路径没有则创建
 	now := time.Now()
@@ -49,6 +51,7 @@ func LoggerToFile() gin.HandlerFunc {
 	}
 	//实例化
 	logger := logrus.New()
+	logger.Formatter = &logrus.TextFormatter{}
 	//设置输出
 	logger.Out = src
 	//设置日志级别
@@ -74,13 +77,39 @@ func LoggerToFile() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 		// 请求IP
 		clientIP := c.ClientIP()
-		// 日志格式
-		logger.Infof("| %3d | %13v | %15s | %s | %s |",
+
+		//header := c.Request.Header
+
+		logIn("fdfd")
+		// 日志格式 -- 基础内容
+		logger.Infof("%3d | %13v | %15s | %s | %s",
 			statusCode,
 			latencyTime,
 			clientIP,
 			reqMethod,
 			reqUri,
 		)
+
+
+
+/*		jsonRes, err := pkg.MapToJson(header)
+		if err != nil {
+			fmt.Printf("Convert json to map failed with error: %+v\n", err)
+		}
+
+		logIn(header)*/
+	}
+}
+
+//插入文本内容
+func logIn(param string) {
+	//写入文件
+	src, err := os.OpenFile(absolute_file_name, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	if err != nil {
+		fmt.Println("err", err)
+
+		lll := log.New(src, "", 0)
+
+		lll.Println(param)
 	}
 }

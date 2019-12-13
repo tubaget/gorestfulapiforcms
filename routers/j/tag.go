@@ -1,4 +1,4 @@
-package v1
+package j
 
 import (
 	"net/http"
@@ -16,7 +16,6 @@ import (
 //获取多个文章标签
 func GetTags(c *gin.Context) {
 	name := c.Query("name")
-
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
 
