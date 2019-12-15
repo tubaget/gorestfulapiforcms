@@ -78,9 +78,9 @@ func LoggerToFile() gin.HandlerFunc {
 		// 请求IP
 		clientIP := c.ClientIP()
 
-		//header := c.Request.Header
+		header := c.Request.Header
 
-		logIn("fdfd")
+		logIn(header)
 		// 日志格式 -- 基础内容
 		logger.Infof("%3d | %13v | %15s | %s | %s",
 			statusCode,
@@ -107,9 +107,9 @@ func logIn(param string) {
 	src, err := os.OpenFile(absolute_file_name, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		fmt.Println("err", err)
-
-		lll := log.New(src, "", 0)
-
-		lll.Println(param)
 	}
+
+	lll := log.New(src, "", 0)
+
+	lll.Println(param)
 }
